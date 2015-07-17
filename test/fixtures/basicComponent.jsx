@@ -10,7 +10,7 @@ var BasicComponent = React.createClass({
     return (
       <div {...this.props} ref='foo' className='Foo'>
         <ul refCollection='bar'>
-          <li>1</li>
+          <li ref='bar1' key='bar1key'>1</li>
           <li>2</li>
         </ul>
         <input ref='baz' defaultValue='Baz' />

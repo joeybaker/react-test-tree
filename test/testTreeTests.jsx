@@ -1,6 +1,7 @@
 /* global describe, it, before, after, beforeEach, afterEach */
 
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var testTree = require('../lib/testTree');
@@ -9,23 +10,23 @@ var StubbingComponent = require('./fixtures/stubbingComponent.jsx');
 var MockComponent = require('./fixtures/mockComponent.jsx');
 var NullComponent = require('./fixtures/nullComponent.jsx');
 var ContextComponent = require('./fixtures/contextComponent.jsx');
-var utils = React.addons.TestUtils;
+var utils = require('react/lib/ReactTestUtils');
 
 describe('testTree', function () {
 
   describe('by default', function () {
     var tree;
     before(function () {
-      sinon.spy(React, 'render');
+      sinon.spy(ReactDOM, 'render');
       tree = testTree(<BasicComponent />);
     });
     after(function () {
       tree.dispose();
-      React.render.restore();
+      ReactDOM.render.restore();
     });
 
     it('should only render the top-level component', function () {
-      expect(React.render).to.have.been.calledOnce;
+      expect(ReactDOM.render).to.have.been.calledOnce;
     });
 
     it('should only have dispose method on root node', function () {
@@ -38,7 +39,7 @@ describe('testTree', function () {
   describe('when tree is disposed', function () {
     var tree, spy;
     beforeEach(function () {
-      spy = sinon.spy(React, 'unmountComponentAtNode');
+      spy = sinon.spy(ReactDOM, 'unmountComponentAtNode');
       tree = testTree(<BasicComponent />);
       tree.dispose();
     });
