@@ -112,6 +112,18 @@ describe('TestClassNode', function () {
     it('should not recreate refCollection nodes', function () {
       expect(tree.bar[0]).to.equal(barCollectionNode);
     });
+
+    describe('when child components update', function () {
+      before(function () {
+
+      });
+
+      it('should force full update on root node');
+
+      it('should not perform second update on source node');
+
+      it('should still obey original shouldComponentUpdate');
+    });
   });
 
   describe('when child nodes unmount', function () {
