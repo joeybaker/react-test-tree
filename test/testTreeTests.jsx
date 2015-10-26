@@ -30,7 +30,7 @@ describe('testTree', function () {
 
     it('should only have dispose method on root node', function () {
       expect(tree.dispose).to.be.a('function');
-      expect(tree.foo.dispose).to.not.exist;
+      expect(tree.get('foo').dispose).to.not.exist;
     });
   });
 
@@ -105,34 +105,34 @@ describe('testTree', function () {
     });
 
     it('should not render anything when stub for ref is null', function () {
-      expect(tree.nofoo).to.not.exist;
+      expect(tree.get('nofoo')).to.not.exist;
     });
 
     it('should stub deeply nested refs', function () {
-      expect(tree.boz.fuz).to.exist;
-      expect(tree.boz.buz).to.not.exist;
+      expect(tree.getIn(['boz', 'fuz'])).to.exist;
+      expect(tree.getIn(['boz', 'buz'])).to.not.exist;
     });
 
     it('should stub ref with stub element if provided', function () {
-      expect(utils.isCompositeComponentWithType(tree.foo.element, MockComponent));
-      expect(utils.isCompositeComponentWithType(tree.baz.element, MockComponent));
+      expect(utils.isCompositeComponentWithType(tree.get('foo').element, MockComponent));
+      expect(utils.isCompositeComponentWithType(tree.get('baz').element, MockComponent));
     });
 
     it('should copy props from original onto stub element', function () {
-      expect(tree.foo.getProp('bar')).to.equal('bar');
-      expect(tree.foo.key).to.equal('foo');
+      expect(tree.get('foo').getProp('bar')).to.equal('bar');
+      expect(tree.get('foo').key).to.equal('foo');
     });
 
     it('should pass children to stub element', function () {
-      expect(tree.foo.getProp('children')).to.equal('Foo');
+      expect(tree.get('foo').getProp('children')).to.equal('Foo');
     });
 
     it('should use stub element\'s children if available', function () {
-      expect(tree.baz.getProp('children')).to.equal('Bazza');
+      expect(tree.get('baz').getProp('children')).to.equal('Bazza');
     });
 
     it('should ignore higher order components', function () {
-      expect(utils.isCompositeComponentWithType(tree.hoc.innerSpan.element, MockComponent)).to.be.true;
+      expect(utils.isCompositeComponentWithType(tree.getIn(['hoc', 'innerSpan']).element, MockComponent)).to.be.true;
     });
   });
 });

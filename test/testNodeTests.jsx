@@ -26,19 +26,19 @@ describe('TestNode', function () {
     });
 
     it('should expose element value', function () {
-      expect(tree.baz.value).to.equal('Baz');
+      expect(tree.get('baz').value).to.equal('Baz');
     });
 
     it('should expose element inner text', function () {
-      expect(tree.bam.innerText).to.equal('Bam');
+      expect(tree.get('bam').innerText).to.equal('Bam');
     });
 
     it('should expose ref', function () {
-      expect(tree.baz.ref).to.equal('baz');
+      expect(tree.get('baz').ref).to.equal('baz');
     });
 
     it('should expose key', function () {
-      expect(tree.bar1.key).to.equal('bar1key');
+      expect(tree.get('bar1').key).to.equal('bar1key');
     });
 
     it('#isMounted() should return true', function () {
@@ -57,7 +57,7 @@ describe('TestNode', function () {
     });
 
     it('should return DOM node', function () {
-      expect(tree.baz.getDOMNode()).to.be.an.instanceOf(HTMLInputElement);
+      expect(tree.get('baz').getDOMNode()).to.be.an.instanceOf(HTMLInputElement);
     });
 
     it('should simulate click', function () {
@@ -78,9 +78,9 @@ describe('TestNode', function () {
     });
 
     it('should set value', function () {
-      expect(tree.baz.value).to.equal('Baz');
-      tree.baz.value = 'BazFoo';
-      expect(tree.baz.value).to.equal('BazFoo');
+      expect(tree.get('baz').value).to.equal('Baz');
+      tree.get('baz').value = 'BazFoo';
+      expect(tree.get('baz').value).to.equal('BazFoo');
     });
 
     it('should return mount state', function () {
