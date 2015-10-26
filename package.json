@@ -1,6 +1,6 @@
 {
   "name": "react-test-tree",
-  "version": "0.2.0",
+  "version": "1.0.0-rc1",
   "description": "Simple and concise React component testing",
   "main": "index.js",
   "scripts": {
