@@ -1,4 +1,5 @@
 var React = require('react');
+var HigherOrderComponent = require('./higherOrderComponent.jsx');
 
 var StubbingComponent2 = React.createClass({
   render: function () {
@@ -18,6 +19,7 @@ var StubbingComponent = React.createClass({
         <div ref='foo' key='foo' bar='bar'>Foo</div>
         <div ref='baz'>Baz</div>
         <StubbingComponent2 ref='boz' />
+        <HigherOrderComponent ref='hoc' />
       </div>
     );
   }

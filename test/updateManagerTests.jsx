@@ -1,7 +1,6 @@
 /* global describe, it */
 
 describe('UpdateManager', function () {
-
   describe('when a node updates', function () {
     it('should force an update on the root element');
 
@@ -15,5 +14,4 @@ describe('UpdateManager', function () {
 
     it('should return true if the node is not the source node');
   });
-
 });

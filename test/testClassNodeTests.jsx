@@ -10,9 +10,9 @@ var BasicComponent = require('./fixtures/basicComponent.jsx');
 var NestedComponent = require('./fixtures/nestedComponent.jsx');
 var UnmountingComponent = require('./fixtures/unmountingComponent.jsx');
 var UnsafeComponent = require('./fixtures/unsafeComponent.jsx');
+var HigherOrderComponent = require('./fixtures/higherOrderComponent.jsx');
 
 describe('TestClassNode', function () {
-
   describe('by default', function () {
     var tree;
     before(function () {
@@ -37,7 +37,6 @@ describe('TestClassNode', function () {
         foo: 'bar'
       });
     });
-
   });
 
   describe('when unsafe ref names are supplied', function () {
@@ -157,6 +156,21 @@ describe('TestClassNode', function () {
     });
   });
 
+  describe('when a higher order component is found', function () {
+    var tree;
+    beforeEach(function () {
+      tree = testTree(<HigherOrderComponent />);
+    });
+    afterEach(function () {
+      tree.dispose();
+    });
+
+    it('should skip the HOC and go direct to the inner component', function () {
+      expect(tree.innerComponent).to.not.exist;
+      expect(tree.innerSpan).to.exist;
+    });
+  });
+
   describe('when node methods are called', function () {
     var tree, spy;
     beforeEach(function () {
@@ -200,5 +214,4 @@ describe('TestClassNode', function () {
       expect(tree.isMounted()).to.be.false;
     });
   });
-
 });

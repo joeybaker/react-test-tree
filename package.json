@@ -20,6 +20,7 @@
   "homepage": "https://github.com/QubitProducts/react-test-tree",
   "dependencies": {
     "inherits": "^2.0.1",
+    "karma-source-map-support": "^1.1.0",
     "lodash": "^3.6.0"
   },
   "peerDependencies": {
@@ -43,7 +44,7 @@
     "mocha-spec-cov": "0.0.3",
     "react": "0.14.0-beta1",
     "react-dom": "0.14.0-beta1",
-    "semistandard": "^6.0.0",
+    "semistandard": "^7.0.0",
     "sinon": "^1.14.1",
     "sinon-chai": "^2.7.0",
     "uglify-js": "^2.4.17"

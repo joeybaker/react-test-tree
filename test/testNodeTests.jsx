@@ -8,7 +8,6 @@ var BasicComponent = require('./fixtures/basicComponent.jsx');
 var utils = require('react/lib/ReactTestUtils');
 
 describe('TestNode', function () {
-
   describe('by default', function () {
     var tree;
     before(function () {
@@ -90,5 +89,4 @@ describe('TestNode', function () {
       expect(tree.isMounted()).to.be.false;
     });
   });
-
 });

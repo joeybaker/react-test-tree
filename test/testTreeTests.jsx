@@ -13,7 +13,6 @@ var ContextComponent = require('./fixtures/contextComponent.jsx');
 var utils = require('react/lib/ReactTestUtils');
 
 describe('testTree', function () {
-
   describe('by default', function () {
     var tree;
     before(function () {
@@ -33,7 +32,6 @@ describe('testTree', function () {
       expect(tree.dispose).to.be.a('function');
       expect(tree.foo.dispose).to.not.exist;
     });
-
   });
 
   describe('when tree is disposed', function () {
@@ -95,6 +93,9 @@ describe('testTree', function () {
         nofoo: null,
         boz: {
           buz: null
+        },
+        hoc: {
+          innerSpan: <MockComponent />
         }
       };
       tree = testTree(<StubbingComponent />, { stub: stubTree });
@@ -130,6 +131,8 @@ describe('testTree', function () {
       expect(tree.baz.getProp('children')).to.equal('Bazza');
     });
 
+    it('should ignore higher order components', function () {
+      expect(utils.isCompositeComponentWithType(tree.hoc.innerSpan.element, MockComponent)).to.be.true;
+    });
   });
-
 });

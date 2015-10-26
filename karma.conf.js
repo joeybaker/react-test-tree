@@ -81,7 +81,6 @@ module.exports = function (config) {
       reporters: ['dots', 'saucelabs'],
       singleRun: true
     });
-
   }
 
   function local () {
@@ -97,7 +96,7 @@ module.exports = function (config) {
   function base () {
     return {
       basePath: '',
-      frameworks: ['mocha', 'browserify'],
+      frameworks: ['browserify', 'source-map-support', 'mocha'],
       browserify: {
         debug: true,
         bundleDelay: 1500,
@@ -134,5 +133,4 @@ module.exports = function (config) {
       return config;
     }
   }
-
 };
