@@ -148,12 +148,28 @@ __Notes__:
 ## API
 
 ### `testTree(<Component />, {options})`
-Creates the tree and returns the root node, with all `ref` and `refCollection` nodes made available as properties.
+Creates the tree and returns the root node.
 
 *__Options__*
 * `stub`: see section on [stubs](#stubs)
 * `mount`: if true, the tree's container will be mounted into the body rather than being rendered entirely in memory. Useful if you need to test various styling aspects.
 * `context`: use this option to pass through the context object required for your component. test-tree will automatically wrap your component and pass through the context.
+
+### `node.get(refName)`
+Returns the node for the specified `ref` or `refCollection` name.
+
+### `node.getIn([refName])`
+Same as `node.get(refName)` except it allows you to cleanly retrieve a node from deep down the ref tree. For example, instead of:
+
+```jsx
+tree.get("foo").get("bar").get("baz").click();
+```
+
+you could write:
+
+```jsx
+tree.getIn(["foo", "bar", "baz"]).click();
+```
 
 ### `rootNode.dispose()`
 Safely unmount the tree. Will only unmount if component is already mounted. Can only be called on the root node of the tree.
@@ -165,7 +181,13 @@ Returns the state of your component.
 Getter/setter for the element value. Should only be used if the component is a valid HTML element that accepts the value attribute.
 
 ### `node.simulate`
-Instance of `React.addons.TestUtils.Simulate`, bound to the node.
+Instance of `React.addons.TestUtils.Simulate`, bound to the node. All its methods (beforeInput, blur, change, click, compositionEnd, compositionStart, compositionUpdate, contextMenu, copy, cut, doubleClick, drag, dragEnd, dragEnter, dragExit, dragLeave, dragOver, dragStart, drop, error, focus, input, keyDown, keyPress, keyUp, load, mouseDown, mouseEnter, mouseLeave, mouseMove, mouseOut, mouseOver, mouseUp, paste, reset, scroll, select, submit, touchCancel, touchEnd, touchMove, touchStart, wheel) can be called.
+
+For example, to simulate double-clicking a node called `myButton`, use:
+
+```javascript
+myButton.simulate.doubleClick();
+```
 
 ### `node.click()`
 Shorthand method for simulating a click on the node's element.
@@ -191,6 +213,21 @@ Reference to the original React element for the node.
 ### `node.innerText`
 Returns the `innerText` of the element (or `textContent` if `innerText` not present).
 
+
+## Updating to v1.0.0
+Pre-v1.0.0, refs and refCollections were accessible as direct properties of the node. This led to issues with collisions between ref names and react-test-tree's node methods. In v1.0.0 the API has been changed to solve this problem. Node are now accessed using the `node.get()` and `node.getIn()` methods:
+
+```jsx
+// Pre-v1.0.0
+tree.foo.bar.click();
+
+// v1.0.0
+tree.get("foo").get("bar").click();
+// or
+tree.getIn(["foo", "bar"]).click();
+```
+
+
 ## Contributing
 
 * `make bootstrap` - install dependencies
@@ -199,28 +236,3 @@ Returns the `innerText` of the element (or `textContent` if `innerText` not pres
 * `make lint` - lint the project
 * `make test-watch` - run karma with the watch option
 * `make release` - increment and publish to npm
-
-
-## Git Commit Messages
-
-* Use the present tense ("Add feature" not "Added feature")
-* Use the imperative mood ("Move cursor to..." not "Moves cursor to...")
-* Limit the first line to 72 characters or less
-* Reference issues and pull requests liberally
-* Consider starting the commit message with an applicable emoji:
-    * :lipstick: `:lipstick:` when improving the format/structure of the code
-    * :racehorse: `:racehorse:` when improving performance
-    * :non-potable_water: `:non-potable_water:` when plugging memory leaks
-    * :memo: `:memo:` when writing docs
-    * :penguin: `:penguin:` when fixing something on Linux
-    * :apple: `:apple:` when fixing something on Mac OS
-    * :checkered_flag: `:checkered_flag:` when fixing something on Windows
-    * :bug: `:bug:` when fixing a bug
-    * :fire: `:fire:` when removing code or files
-    * :green_heart: `:green_heart:` when fixing the CI build
-    * :white_check_mark: `:white_check_mark:` when adding tests
-    * :lock: `:lock:` when dealing with security
-    * :arrow_up: `:arrow_up:` when upgrading dependencies
-    * :arrow_down: `:arrow_down:` when downgrading dependencies
-
-(From [atom](https://atom.io/docs/latest/contributing#git-commit-messages))

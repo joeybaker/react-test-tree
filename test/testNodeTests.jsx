@@ -3,9 +3,12 @@
 var React = require('react');
 var expect = require('chai').expect;
 var sinon = require('sinon');
+var injectTapEventPlugin = require('react-tap-event-plugin');
 var testTree = require('../lib/testTree');
 var BasicComponent = require('./fixtures/basicComponent.jsx');
 var utils = require('react/lib/ReactTestUtils');
+
+injectTapEventPlugin();
 
 describe('TestNode', function () {
   describe('by default', function () {
@@ -19,6 +22,10 @@ describe('TestNode', function () {
 
     it('should expose simulate library', function () {
       expect(tree.simulate.click).to.exist;
+    });
+
+    it('should include simulate library addons', function () {
+      expect(tree.simulate.touchTap).to.exist;
     });
 
     it('should expose element', function () {
