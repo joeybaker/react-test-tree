@@ -54,13 +54,13 @@ var fooTree = testTree(<FooComponent />, {
     fuz: null
   }
 });
-fooTree.bar.click(); // simulates a click
-fooTree.boz.biz.click(); // simulates a click
-fooTree.baz.length === 2; // collection of nodes
-fooTree.fuz === null; // null due to being stubbed out
+fooTree.get("bar").click(); // simulates a click
+fooTree.getIn(["boz", "biz"]).click(); // simulates a click on a deep node
+fooTree.get("baz").length === 2; // collection of nodes
+fooTree.get("fuz") === null; // null due to being stubbed out
 ```
 
-In the above example, `react-test-tree` has recursively built a tree with all refs and refCollections represented as nodes of the tree. Any refs that appear in the `stub` tree config get replaced.
+In the above example, `react-test-tree` has recursively built a tree with all refs and refCollections represented as nodes of the tree, which can be retrieved using `get()` or `getIn()`. Any refs that appear in the `stub` tree config get replaced.
 
 
 ## refs and refCollections
@@ -80,13 +80,13 @@ var BarComponent = React.createClass({
 });
 
 var barTree = testTree(<BarComponent />);
-barTree.bar.length === 2;
-barTree.bar[0].getAttribute("value") === "blue";
+barTree.get("bar").length === 2;
+barTree.get("bar")[0].getAttribute("value") === "blue";
 ```
 
 __Notes__:
 * You can still apply a `ref` as well as a `refCollection` if you want to be able to manipulate the parent element too.
-* Your `ref`s and `refCollection`s must not have the same name as any of the public properties of a test node, otherwise they will overwrite them. An error will be thrown if you attempt to do this.
+* `ref`s and `refCollection`s may not have the same name.
 
 
 ## Stubs
@@ -133,10 +133,10 @@ var fooTree = testTree(<FooComponent />, {
     }
   }
 });
-fooTree.bar; // -> null
-fooTree.biz.fuz; // -> null
-fooTree.baz; // -> replaced with `MockComponent` and renders `Baz` string as child
-fooTree.boz; // -> replaced with `MockComponent` and renders `Bazza` string as child
+fooTree.get("bar"); // -> null
+fooTree.getIn(["biz", "fuz"]); // -> null
+fooTree.get("baz"); // -> replaced with `MockComponent` and renders `Baz` string as child
+fooTree.get("boz"); // -> replaced with `MockComponent` and renders `Bazza` string as child
 ```
 
 __Notes__:
@@ -226,6 +226,13 @@ tree.get("foo").get("bar").click();
 // or
 tree.getIn(["foo", "bar"]).click();
 ```
+
+
+## React versions
+The master branch currently supports React 0.14 and is not backwards compatible. 
+
+* __React 0.14:__ `react-test-tree@latest`
+* __React 0.13/0.12:__ `react-test-tree@^0.3.1`
 
 
 ## Contributing
