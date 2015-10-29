@@ -124,11 +124,11 @@ describe('testTree', function () {
     });
 
     it('should pass children to stub element', function () {
-      expect(tree.get('foo').getProp('children')).to.equal('Foo');
+      expect(tree.get('foo').getProp('children')[0]).to.equal('Foo');
     });
 
     it('should use stub element\'s children if available', function () {
-      expect(tree.get('baz').getProp('children')).to.equal('Bazza');
+      expect(tree.get('baz').getProp('children')[0]).to.equal('Bazza');
     });
 
     it('should ignore higher order components', function () {
