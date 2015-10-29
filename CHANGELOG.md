@@ -1,4 +1,8 @@
-### v1.0.0-beta
+### v1.0.0-rc2
+* Fixed issue where internal react-test-tree ids would end up being passed down to children, causing `node.getIn()` to return extra nodes
+* Added support for the `wrap` option which causes the root node to be wrapped in another component. See README
+
+### v1.0.0-rc1
 __BREAKING CHANGE:__
 
 * Refs are no longer accessed as direct properties of a node. Instead, they should be retrieved with `node.get()` or `node.getIn()`

@@ -24,8 +24,8 @@
     "lodash": "^3.6.0"
   },
   "peerDependencies": {
-    "react": "0.14.0-beta1",
-    "react-dom": "0.14.0-beta1"
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0"
   },
   "devDependencies": {
     "babelify": "^5.0.4",
@@ -42,8 +42,8 @@
     "karma-spec-reporter": "0.0.16",
     "mocha": "^2.2.1",
     "mocha-spec-cov": "0.0.3",
-    "react": "0.14.0-beta1",
-    "react-dom": "0.14.0-beta1",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
     "react-tap-event-plugin": "^0.2.1",
     "semistandard": "^7.0.0",
     "sinon": "^1.14.1",

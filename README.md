@@ -154,6 +154,16 @@ Creates the tree and returns the root node.
 * `stub`: see section on [stubs](#stubs)
 * `mount`: if true, the tree's container will be mounted into the body rather than being rendered entirely in memory. Useful if you need to test various styling aspects.
 * `context`: use this option to pass through the context object required for your component. test-tree will automatically wrap your component and pass through the context.
+* `wrap`: if true, the tree will be wrapped in an outer component. This is useful if you want to pass elements with refs directly into test-tree without them being contained in a component, e.g.:
+```jsx
+var tree = testTree(
+  <ul refCollection="foo">
+    <li ref="bar" />
+    <li />
+  </ul>
+, { wrap: true });
+tree.foo; // exists
+```
 
 ### `node.get(refName)`
 Returns the node for the specified `ref` or `refCollection` name.
