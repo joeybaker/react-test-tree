@@ -1,3 +1,6 @@
+### v1.0.0-rc3
+* Fixed bug caused by React.Children.Map resetting element _stores
+
 ### v1.0.0-rc2
 * Fixed issue where internal react-test-tree ids would end up being passed down to children, causing `node.getIn()` to return extra nodes
 * Added support for the `wrap` option which causes the root node to be wrapped in another component. See README
