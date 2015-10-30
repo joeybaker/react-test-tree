@@ -4,7 +4,7 @@ var InnerComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <span ref='innerSpan' />
+        <span testRef='innerSpan' />
       </div>
     );
   }
@@ -13,11 +13,11 @@ var InnerComponent = React.createClass({
 var HigherOrderComponent = React.createClass({
   render: function () {
     return (
-      <InnerComponent ref='innerComponent' />
+      <InnerComponent testRef='innerComponent' />
     );
   }
 });
 
-HigherOrderComponent.innerComponentRef = 'innerComponent';
+HigherOrderComponent.innerTestRef = 'innerComponent';
 
 module.exports = HigherOrderComponent;

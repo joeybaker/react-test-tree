@@ -17,13 +17,13 @@ var UnmountingComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <ul refCollection='foo'>
+        <ul testRefCollection='foo'>
           <li>1</li>
           {this.renderIfMounted(<li>2</li>)}
         </ul>
         {this.renderIfMounted(
-          <div ref='bar'>
-            <ul refCollection='baz'>
+          <div testRef='bar'>
+            <ul testRefCollection='baz'>
               <li>1</li>
               <li>2</li>
             </ul>
