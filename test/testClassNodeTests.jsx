@@ -34,6 +34,10 @@ describe('TestClassNode', function () {
         foo: 'bar'
       });
     });
+
+    it('should re-use existing TestNode instances');
+
+    it('should remap every time the tree updates');
   });
 
   describe('when nested components are supplied', function () {
@@ -63,39 +67,6 @@ describe('TestClassNode', function () {
     it('should only map refCollections to direct owners', function () {
       expect(tree.get('refCollection2')).to.not.exist;
       expect(tree.getIn(['nested', 'refCollection1'])).to.not.exist;
-    });
-  });
-
-  describe('when nodes update', function () {
-    var tree, bazNode, barCollectionNode;
-    before(function () {
-      tree = testTree(<BasicComponent />);
-      bazNode = tree.get('baz');
-      barCollectionNode = tree.get('bar')[0];
-      tree.element.forceUpdate();
-    });
-    after(function () {
-      tree.dispose();
-    });
-
-    it('should not recreate ref nodes', function () {
-      expect(tree.get('baz')).to.equal(bazNode);
-    });
-
-    it('should not recreate refCollection nodes', function () {
-      expect(tree.get('bar')[0]).to.equal(barCollectionNode);
-    });
-
-    describe('when child components update', function () {
-      before(function () {
-
-      });
-
-      it('should force full update on root node');
-
-      it('should not perform second update on source node');
-
-      it('should still obey original shouldComponentUpdate');
     });
   });
 

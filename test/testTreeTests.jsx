@@ -32,6 +32,8 @@ describe('testTree', function () {
       expect(tree.dispose).to.be.a('function');
       expect(tree.get('foo').dispose).to.not.exist;
     });
+
+    it('should remove test props from elements');
   });
 
   describe('when tree is disposed', function () {
@@ -46,7 +48,6 @@ describe('testTree', function () {
     });
 
     it('should unmount component', function () {
-      tree.dispose();
       expect(tree.isMounted()).to.be.false;
       expect(spy).to.have.been.calledOnce;
     });
@@ -79,7 +80,7 @@ describe('testTree', function () {
       tree.dispose();
     });
 
-    it('should pass context context through to component', function () {
+    it('should pass context through to component', function () {
       expect(tree.element.context).to.deep.equal(context);
     });
   });
