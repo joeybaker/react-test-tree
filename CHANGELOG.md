@@ -1,3 +1,8 @@
+### v1.0.0-rc4
+__BREAKING CHANGE:__
+
+* `ref` and `refCollection` are no longer supported; you should now use `testRef` and `testRefCollection`
+
 ### v1.0.0-rc3
 * Fixed bug caused by React.Children.Map resetting element _stores
 

@@ -12,7 +12,7 @@ With [npm](http://npmjs.org) do:
 
 `react-test-tree` is a simple, scalable and concise way of testing React components. It is an evolution of the [react-page-objects](https://github.com/QubitProducts/react-page-objects) library.
 
-A test tree is dev-friendly representation of your entire React component tree, built by recursing through the refs of your elements.
+A test tree is dev-friendly representation of your entire React component tree, built by recursing through special props applied to your components.
 
 React gives us some great utilities for testing React components, however they lead to overly-verbose boilerplate that clutters your tests. `react-test-tree` tidies this clutter away, allowing you to manipulate your components with short, concise statements:
 
@@ -21,7 +21,7 @@ var BozComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <button ref="biz">Biz</button>
+        <button testRef="biz">Biz</button>
       </div>
     );
   }
@@ -37,13 +37,13 @@ var FooComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <button ref="bar">Bar</button>
-        <select refCollection="baz">
+        <button testRef="bar">Bar</button>
+        <select testRefCollection="baz">
           <option>blue</option>
           <option>gold</option>
         </select>
-        <BozComponent ref="boz" />
-        <FuzComponent ref="fuz" />
+        <BozComponent testRef="boz" />
+        <FuzComponent testRef="fuz" />
       </div>
     );
   }
@@ -60,18 +60,20 @@ fooTree.get("baz").length === 2; // collection of nodes
 fooTree.get("fuz") === null; // null due to being stubbed out
 ```
 
-In the above example, `react-test-tree` has recursively built a tree with all refs and refCollections represented as nodes of the tree, which can be retrieved using `get()` or `getIn()`. Any refs that appear in the `stub` tree config get replaced.
+In the above example `react-test-tree` has recursively built a tree out of the `testRef` and `testRefCollection` props, represented as nodes of the tree, which can be retrieved using `get()` or `getIn()`. Any names that appear in the `stub` tree config get replaced or removed.
 
 
-## refs and refCollections
+## testRef and testRefCollection
 
-You should be familiar with the `ref` prop in React. They are used when you need to reference an element in your render function. Unfortunately react does not give us an easy way to reference a collection of `ref`s as a whole. `react-test-tree` makes this possible by use of the `refCollection` prop. Declaring `refCollection` on a component will make all it's direct children available on the corresonding tree node as an array:
+You should be familiar with the `ref` prop in React. They are used when you need to reference an element in your render function. You can look at the `testRef` prop like a `ref`, but purely for testing. It is necessary to distinguish between the two because of their applications; the React team is making it increasingly clear that `ref`s should only be used for very specific purposes, which don't primarily include testing.
+
+As well as the basic `testRef` prop, `react-test-tree` makes it possible to retrieve the children of an element by use of `refCollection`. Declaring `testRefCollection` on a component will make all it's direct children available on the corresonding tree node as an array:
 
 ```jsx
 var BarComponent = React.createClass({
   render: function () {
     return (
-      <select ref="foo" refCollection="bar">
+      <select testRef="foo" testRefCollection="bar">
         <option value="blue">Blue</option>
         <option value="gold">Gold</option>
       </select>;
@@ -85,13 +87,13 @@ barTree.get("bar")[0].getAttribute("value") === "blue";
 ```
 
 __Notes__:
-* You can still apply a `ref` as well as a `refCollection` if you want to be able to manipulate the parent element too.
-* `ref`s and `refCollection`s may not have the same name.
+* You can still apply a `testRef` as well as a `testRefCollection` if you want to be able to manipulate the parent element too.
+* `testRef`s and `testRefCollection`s may not have the same name.
 
 
 ## Stubs
 
-It is inevitable that at some point when testing React components you will want to avoid rendering part of a component. Perhaps it might trigger some sideways data loading, or maybe you want to replace it with a mock. `react-test-tree` allows you to quickly and easily stub out any refs in the tree with either `null` or a replacement component:
+It is inevitable that at some point when testing React components you will want to avoid rendering part of a component. Perhaps it might trigger some sideways data loading, or maybe you want to replace it with a mock. `react-test-tree` allows you to quickly and easily stub out any testRefs in the tree with either `null` or a replacement component:
 
 ```jsx
 var MockComponent = React.createClass({
@@ -105,7 +107,7 @@ var BizComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <button ref="fuz">Fuz</button>
+        <button testRef="fuz">Fuz</button>
       </div>
     );
   }
@@ -115,9 +117,9 @@ var FooComponent = React.createClass({
   render: function () {
     return (
       <div>
-        <div ref="bar" />
-        <div ref="baz" aProp="hello">Baz</div>
-        <div ref="boz" aProp="hello">Boz</div>
+        <div testRef="bar" />
+        <div testRef="baz" aProp="hello">Baz</div>
+        <div testRef="boz" aProp="hello">Boz</div>
       </div>
     );
   }
@@ -141,8 +143,8 @@ fooTree.get("boz"); // -> replaced with `MockComponent` and renders `Bazza` stri
 
 __Notes__:
 * You can use any falsy stub value other than `undefined` to completely remove a component (e.g. `null`, `false`).
-* The stub object supports nesting; you can stub refs nested deep inside child composite components.
-* Mock components are rendered with the new props (and children) of the mock component merged into the original props (and children) of the stubbed ref. This behaviour is demonstrated in the example above; `baz` will log `hello` and have the child `Baz`, whilst `boz` will log `foobar` and have the child `Bazza`.
+* The stub object supports nesting; you can stub testRefs nested deep inside child composite components.
+* Mock components are rendered with the new props (and children) of the mock component merged into the original props (and children) of the stubbed testRef. This behaviour is demonstrated in the example above; `baz` will log `hello` and have the child `Baz`, whilst `boz` will log `foobar` and have the child `Bazza`.
 
 
 ## API
@@ -154,11 +156,11 @@ Creates the tree and returns the root node.
 * `stub`: see section on [stubs](#stubs)
 * `mount`: if true, the tree's container will be mounted into the body rather than being rendered entirely in memory. Useful if you need to test various styling aspects.
 * `context`: use this option to pass through the context object required for your component. test-tree will automatically wrap your component and pass through the context.
-* `wrap`: if true, the tree will be wrapped in an outer component. This is useful if you want to pass elements with refs directly into test-tree without them being contained in a component, e.g.:
+* `wrap`: if true, the tree will be wrapped in an outer component. This is useful if you want to pass elements with testRefs directly into test-tree without them being contained in a component, e.g.:
 ```jsx
 var tree = testTree(
-  <ul refCollection="foo">
-    <li ref="bar" />
+  <ul testRefCollection="foo">
+    <li testRef="bar" />
     <li />
   </ul>
 , { wrap: true });
@@ -166,10 +168,10 @@ tree.foo; // exists
 ```
 
 ### `node.get(refName)`
-Returns the node for the specified `ref` or `refCollection` name.
+Returns the node for the specified `testRef` or `testRefCollection` name.
 
 ### `node.getIn([refName])`
-Same as `node.get(refName)` except it allows you to cleanly retrieve a node from deep down the ref tree. For example, instead of:
+Same as `node.get(refName)` except it allows you to cleanly retrieve a node from deep down the testRef tree. For example, instead of:
 
 ```jsx
 tree.get("foo").get("bar").get("baz").click();
@@ -225,6 +227,28 @@ Returns the `innerText` of the element (or `textContent` if `innerText` not pres
 
 
 ## Updating to v1.0.0
+React 0.14 introduced stateless function components. This new type of component cannot contain refs and also cannot have refs applied to them. The React team is trying to encourage refs to only be used for very specific purposes, which doesn't primarily include testing. We have taken the decision with `react-test-tree` to support the React team in their decision to separate the usage of refs from testing by switching to using the `testRef` and `testRefCollection` props instead of `ref` and `testRef`. Here is an example of a component pre-v1.0.0 and after:
+
+```jsx
+// Pre-v1.0.0
+var MyComponent = React.createClass({
+  render: function () {
+    return (
+      <div ref='foo' refCollection='bar' />
+    );
+  }
+});
+
+// v1.0.0
+var MyComponent = React.createClass({
+  render: function () {
+    return (
+      <div testRef='foo' testRefCollection='bar' />
+    );
+  }
+});
+```
+
 Pre-v1.0.0, refs and refCollections were accessible as direct properties of the node. This led to issues with collisions between ref names and react-test-tree's node methods. In v1.0.0 the API has been changed to solve this problem. Node are now accessed using the `node.get()` and `node.getIn()` methods:
 
 ```jsx
