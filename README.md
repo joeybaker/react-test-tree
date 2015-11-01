@@ -89,6 +89,15 @@ barTree.get("bar")[0].getAttribute("value") === "blue";
 __Notes__:
 * You can still apply a `testRef` as well as a `testRefCollection` if you want to be able to manipulate the parent element too.
 * `testRef`s and `testRefCollection`s may not have the same name.
+* Updates to the render tree will not be reflected in the test tree until the next tick. You should defer accessing the tree after causing any updates:
+
+```jsx
+var tree = testTree(<MyComponent />);
+tree.get('button').click();
+defer(function () {
+  expect(tree.state.clicked).to.be.true; // passes
+});
+```
 
 
 ## Stubs
