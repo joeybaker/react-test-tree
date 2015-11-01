@@ -4,10 +4,12 @@ var React = require('react');
 var expect = require('chai').expect;
 var testTree = require('../lib/testTree');
 var TestNode = require('../lib/testNode');
+var TestClassNode = require('../lib/testClassNode');
 var BasicComponent = require('./fixtures/basicComponent.jsx');
 var NestedComponent = require('./fixtures/nestedComponent.jsx');
 var UnmountingComponent = require('./fixtures/unmountingComponent.jsx');
 var HigherOrderComponent = require('./fixtures/higherOrderComponent.jsx');
+var StatelessComponent = require('./fixtures/statelessComponent.jsx');
 
 describe('TestClassNode', function () {
   describe('by default', function () {
@@ -19,11 +21,11 @@ describe('TestClassNode', function () {
       tree.dispose();
     });
 
-    it('should map refs onto tree as TestNodes', function () {
+    it('should map testRefs onto tree as TestNodes', function () {
       expect(tree.get('foo')).to.be.instanceOf(TestNode);
     });
 
-    it('should map refCollections onto tree as arrays of TestNodes', function () {
+    it('should map testRefCollections onto tree as arrays of TestNodes', function () {
       expect(tree.get('bar')).to.be.an('array');
       expect(tree.get('bar')[0]).to.be.an.instanceOf(TestNode);
       expect(tree.get('bar')[1]).to.be.an.instanceOf(TestNode);
@@ -35,9 +37,47 @@ describe('TestClassNode', function () {
       });
     });
 
-    it('should re-use existing TestNode instances');
+    it('should re-use existing TestNode instances', function () {
+      expect(tree.get('foo')).to.equal(tree.get('foo'));
+    });
+  });
 
-    it('should remap every time the tree updates');
+  describe('when element is a stateless component', function () {
+    var tree;
+    before(function () {
+      tree = testTree(<StatelessComponent />);
+    });
+    after(function () {
+      tree.dispose();
+    });
+
+    it('should still map testRefs onto tree as TestNodes', function () {
+      expect(tree.get('foo')).to.be.instanceOf(TestNode);
+    });
+
+    it('should still map testRefCollections onto tree as arrays of TestNodes', function () {
+      expect(tree.get('bar')).to.be.an('array');
+      expect(tree.get('bar')[0]).to.be.an.instanceOf(TestNode);
+      expect(tree.get('bar')[1]).to.be.an.instanceOf(TestNode);
+    });
+  });
+
+  describe('when child is a stateless component', function () {
+    var tree;
+    before(function () {
+      tree = testTree(<div><StatelessComponent testRef='foo' /></div>, { wrap: true });
+    });
+    after(function () {
+      tree.dispose();
+    });
+
+    it('should be accessible from the parent', function () {
+      expect(tree.get('foo')).to.exist;
+    });
+
+    it('should be a TestClassNode', function () {
+      expect(tree.get('foo')).to.be.an.instanceOf(TestClassNode);
+    });
   });
 
   describe('when nested components are supplied', function () {
@@ -49,22 +89,22 @@ describe('TestClassNode', function () {
       tree.dispose();
     });
 
-    it('should recursively map refs', function () {
+    it('should recursively map testRefs', function () {
       expect(tree.getIn(['nested', 'ref2'])).to.be.instanceOf(TestNode);
     });
 
-    it('should recursively map refCollections', function () {
+    it('should recursively map testRefCollections', function () {
       expect(tree.getIn(['nested', 'refCollection2'])).to.be.an('array');
       expect(tree.getIn(['nested', 'refCollection2'])[0]).to.be.an.instanceOf(TestNode);
       expect(tree.getIn(['nested', 'refCollection2'])[1]).to.be.an.instanceOf(TestNode);
     });
 
-    it('should only map refs to direct owners', function () {
+    it('should only map testRefs to direct owners', function () {
       expect(tree.get('ref2')).to.not.exist;
       expect(tree.getIn(['nested', 'ref1'])).to.not.exist;
     });
 
-    it('should only map refCollections to direct owners', function () {
+    it('should only map testRefCollections to direct owners', function () {
       expect(tree.get('refCollection2')).to.not.exist;
       expect(tree.getIn(['nested', 'refCollection1'])).to.not.exist;
     });

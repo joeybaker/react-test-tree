@@ -9,7 +9,7 @@ var BasicComponent = React.createClass({
   render: function () {
     return (
       <div {...this.props} testRef='foo' className='Foo'>
-        <ul testRefCollection='bar'>
+        <ul testRefCollection='bar' testRef='boz'>
           <li testRef='bar1' key='bar1key'>1</li>
           <li>2</li>
         </ul>
