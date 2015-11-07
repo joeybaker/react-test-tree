@@ -155,6 +155,41 @@ __Notes__:
 * The stub object supports nesting; you can stub testRefs nested deep inside child composite components.
 * Mock components are rendered with the new props (and children) of the mock component merged into the original props (and children) of the stubbed testRef. This behaviour is demonstrated in the example above; `baz` will log `hello` and have the child `Baz`, whilst `boz` will log `foobar` and have the child `Bazza`.
 
+## Higher Order Components
+The HOC pattern is rapidly becoming the most popular successor to mixins (and the [problems associated with them](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750)). Unfortunately every HOC adds another layer into the component tree, making your testing ref chains longer and less explicit. `react-test-tree` can help alleviate this pain by skipping any component that has the `innerTestRef` property available on its constructor. Here is an example:
+
+```jsx
+var InnerComponent = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <button testRef="span" />
+      </div>
+    )
+  }
+});
+
+function withHOC(Component) {
+  return React.createClass({
+    render: function () {
+      return <Component testRef="innerComponent" />;
+    }
+  });
+}
+
+var MyComponent = withHOC(InnerComponent);
+
+// Without specifying `innerTestRef` we have to deal with the HOC in the ref tree
+var annoyingTree = testTree(<MyComponent />);
+annoyingTree.innerComponent.button.click();
+
+// Adding `innerTestRef` causes react-test-tree to ignore the HOC, keeping the API nice and clean
+MyComponent.innerTestRef = "innerComponent";
+var niceTree = testTree(<MyComponent />);
+niceTree.button.click();
+```
+
+
 
 ## API
 
