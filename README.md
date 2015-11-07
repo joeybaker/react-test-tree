@@ -270,6 +270,29 @@ tree.get("foo").get("bar").click();
 tree.getIn(["foo", "bar"]).click();
 ```
 
+Post-v1.0.0 have a new option, `wrap` that you'll need to pass if you need a `testRef` or `testRefCollection` on the component that you're passing into `react-test-tree`.
+
+```jsx
+// Pre-v1.0.0
+var tree = testTree(
+  <ul refCollection="foo">
+    <li ref="bar" />
+    <li />
+  </ul>);
+
+tree.foo; // exists
+
+// v1.0.0
+var tree = testTree(
+  <ul testRefCollection="foo">
+    <li testRef="bar" />
+    <li />
+  </ul>
+, { wrap: true });
+
+tree.foo; // exists
+```
+
 
 ## React versions
 The master branch currently supports React 0.14 and is not backwards compatible. 
